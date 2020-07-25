@@ -1,30 +1,34 @@
 # Solution to The Assignment
 
 ### Question 1
-1. SELECT COUNT(u_id) AS total_users FROM users;
-   
+```sql
+SELECT COUNT(u_id) AS total_users FROM users;
+```
 
 
 ### Question 2
+```sql
 SELECT
     COUNT(transfer_id) AS total_cfa_transfers
 FROM
     transfers
 WHERE
     send_amount_currency = 'CFA';
-        
+```
 
 ### Question 3
+```sql
 SELECT 
     COUNT(DISTINCT u_id)
 FROM
     transfers
 WHERE
     send_amount_currency = 'CFA';
-
+```
 
 
 ### Question 4
+```sql
 SELECT 
     DATE_PART('month', when_created) AS atx_month, COUNT(atx_id) AS atx_total
 FROM 
@@ -32,7 +36,7 @@ FROM
 WHERE 
     DATE_PART('year',when_created) = 2018 
 GROUP BY atx_month;
-
+```
 
 
 
@@ -42,6 +46,7 @@ the last 7 days (1 week) as we have in the database. It is on this premise that 
 WITH clause to get the data from the range and subsequently use it for the queries.
 
 ### Question 5
+```sql
 WITH last_wk_atx AS (
                     SELECT * FROM agent_transactions 
                     WHERE when_created BETWEEN 
@@ -66,10 +71,11 @@ FROM
      GROUP BY
         agent_id
      HAVING SUM(amount) > 0) AS tb2;
-
+```
 
  
 ### Question 6
+```sql
 WITH last_wk_atx AS (
                     SELECT * FROM agent_transactions 
                     WHERE when_created BETWEEN 
@@ -88,9 +94,10 @@ ON
 GROUP BY 
     agt.city 
 ORDER BY 2 DESC;
-
+```
 
 ### Question 7
+```sql
 WITH last_wk_atx AS (
                     SELECT * FROM agent_transactions 
                     WHERE when_created BETWEEN 
@@ -110,12 +117,13 @@ ON
 GROUP BY
     agt.city, agt.country
 ORDER BY 3 DESC;
-
+```
 
 #### Some notes on questions 8 & 9
 
 
 ### Question 8
+```sql
 SELECT
     w.ledger_location AS country, txfr.kind AS transfer_kind, SUM(txfr.send_amount_scalar) AS send_volume
 FROM
@@ -125,10 +133,11 @@ JOIN
 ON
     txfr.source_wallet_id = w.wallet_id
 GROUP BY w.ledger_location, txfr.kind;
-
+```
 
 
 ### Question 9
+```sql
 SELECT
     w.ledger_location AS country, txfr.kind AS transfer_kind, SUM(txfr.send_amount_scalar) AS send_volume,
     COUNT(txfr.send_amount_scalar) AS transaction_count, COUNT(DISTINCT txfr.u_id) AS unique_senders_number
@@ -139,9 +148,10 @@ JOIN
 ON
     txfr.source_wallet_id = w.wallet_id
 GROUP BY w.ledger_location, txfr.kind;
-
+```
 
 ### Question 10
+```sql
 SELECT
     w.wallet_id, SUM(txfr.send_amount_scalar) total_transfers
 FROM
@@ -153,3 +163,4 @@ ON
 WHERE
     txfr.send_amount_scalar > 10000000 AND txfr.send_amount_currency = 'CFA'
 GROUP BY  w.wallet_id;
+```
